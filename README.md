@@ -137,6 +137,9 @@ This project is executed in **4 phases**, each containing a set of clear deploym
     git merge staging
     git push origin main
     ```
+
+    <img width="662" height="117" alt="image" src="https://github.com/user-attachments/assets/685c568b-bd97-403a-b976-604df5974372" />
+    <img width="662" height="159" alt="image" src="https://github.com/user-attachments/assets/7af08731-0565-4839-8d69-07aed8c95d35" />
     
 11. zxz
 12. xc
@@ -182,6 +185,64 @@ This project is executed in **4 phases**, each containing a set of clear deploym
     <img width="622" height="182" alt="image" src="https://github.com/user-attachments/assets/e40b6b0b-554c-4d5d-ba0f-196cf4d032c5" />
 
 9. Repeat the same process to create an EC2 instance for Staging Environment
+
+### Task-2: Prepare the environment
+
+#### Steps:
+
+1. Update and upgrade the repositories
+
+    ```
+    sudo apt update
+    sudo apt upgrade -y
+    ```
+    
+2. Install python and pip
+
+    ```
+    sudo apt install python3 python3-pip -y
+    ```
+
+3. Install Git
+
+    ```
+    sudo apt install git -y
+    ```
+    
+4. Verify Installation
+
+    ```
+    python3 --version
+    pip3 --version
+    ```
+    
+5. Install Python Virtual Environment
+
+    ```
+    python3 -m venv venv
+    souce venv/bin/activate
+    ```
+
+6. Install Application dependencies (flask and gunicorn)
+
+    ```
+    pip install flask gunicorn
+    ```
+    
+7. Run the application
+
+    ```
+    gunicorn -w 4 app:app -b 0.0.0.0:5000
+    ```
+    
+8. Make sure the below folder structure in the EC2 instance, if `app` folder is missing, create it
+
+    ```
+    /home/ubuntu/app
+    ```
+    
+9. vsd
+10. v
 
 ---
 
