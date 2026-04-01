@@ -60,7 +60,7 @@ jobs:
                 git clone https://github.com/tanneerugowtham6/GitHub_Actions_CI_CD_Assignment.git app
               fi
             fi
-            cd app
+            # cd app
             git pull origin staging
             pip3 install -r requirements.txt
             sudo systemctl restart flask-app
