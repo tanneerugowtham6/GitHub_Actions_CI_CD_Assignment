@@ -242,7 +242,7 @@ This project is executed in **4 phases**, each containing a set of clear deploym
 
     ```
     python3 -m venv venv
-    souce venv/bin/activate
+    source venv/bin/activate
     ```
 
 9. Install Application dependencies (flask and gunicorn)
