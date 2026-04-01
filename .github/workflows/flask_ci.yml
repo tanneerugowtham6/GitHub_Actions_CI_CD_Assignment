@@ -51,10 +51,16 @@ jobs:
           ssh ubuntu@$STAGING << EOF
             set -e
             cd /home/ubuntu
-            if [ ! -d "app"]; then
+            if [ ! -d "app" ]; then
               git clone https://github.com/tanneerugowtham6/GitHub_Actions_CI_CD_Assignment.git app
+            else
+              cd app
+              if [ ! -d ".git" ]; then
+                cd ..
+                rm -rf app
+                git clone https://github.com/tanneerugowtham6/GitHub_Actions_CI_CD_Assignment.git app
+              fi
             fi
-            ls -l /home/ubuntu/app
             cd app
             git pull origin staging
             pip3 install -r requirements.txt
