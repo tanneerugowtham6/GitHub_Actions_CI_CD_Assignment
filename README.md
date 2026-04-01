@@ -107,6 +107,40 @@ This project is executed in **4 phases**, each containing a set of clear deploym
 
     <img width="1710" height="490" alt="image" src="https://github.com/user-attachments/assets/ad5b9571-5194-4139-9760-163ed7293d55" />
 
+3. Wokflow should be triggered
+4. Go to GitHub Repository, click on **Settings**
+
+    <img width="878" height="151" alt="image" src="https://github.com/user-attachments/assets/0ac20de1-c391-4ed8-bfe1-00905bbde120" />
+
+5. From the left side menu expand **Secrets and variables**, select **Actions**
+
+    <img width="1363" height="821" alt="image" src="https://github.com/user-attachments/assets/e3fe5f5c-8a50-4c0b-bde2-00f2877645b5" />
+
+6. Click on New Repository Secret, add **Name** and **Secret**
+
+    <img width="1386" height="553" alt="image" src="https://github.com/user-attachments/assets/6688ce5b-f37b-41c6-b73b-76b60065cec5" />
+
+7.  Click on Add secret
+8.  Repeat the same to add another secrets
+
+> [!NOTE]
+> This workflow requires to secret vairables, MONGO_URI, SECRET_KEY to be passed for the application.
+
+9.  Commit the any pending chnages to the repository, which triggers the workflow
+
+    <img width="1658" height="337" alt="image" src="https://github.com/user-attachments/assets/8fc7f982-b1b8-4fd9-9642-2fcfa47b70e0" />
+
+10. Once the pipeline runs successfully and all teh conflicts were resolved, merge the changes to `main` branch
+
+    ```
+    git checkout main
+    git merge staging
+    git push origin main
+    ```
+    
+11. zxz
+12. xc
+
 ---
 
 ## Phase 3: Prepare the Staging and Production Infrastructure
