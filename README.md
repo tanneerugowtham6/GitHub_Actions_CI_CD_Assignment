@@ -241,11 +241,12 @@ This project is executed in **4 phases**, each containing a set of clear deploym
 8. Install Python Virtual Environment
 
     ```
+    sudo apt install python3.12-venv -y
     python3 -m venv venv
     source venv/bin/activate
     ```
 
-9. Install Application dependencies (flask and gunicorn)
+**9. Install Application dependencies (flask and gunicorn)
 
     ```
     pip install flask gunicorn
@@ -255,7 +256,7 @@ This project is executed in **4 phases**, each containing a set of clear deploym
 
     ```
     gunicorn -w 4 app:app -b 0.0.0.0:5000
-    ```
+    ```**
     
 11. Make sure the below folder structure in the EC2 instance, if `app` folder is missing, create it
 
@@ -265,6 +266,53 @@ This project is executed in **4 phases**, each containing a set of clear deploym
     
 12. Repeat the same steps for Production EC2 Instance
 
+### Task-3: Create systemd Service
+
+### Steps:
+
+1. Connect to the Staging EC2 Instance, create `flask-app.service` file
+
+    ```sh
+    sudo nano /etc/systemd/system/flask-app.service
+    ```
+    
+2. Paste the below configuration to the service file
+
+    ```sh
+    [Unit]
+    Description=Python Web App
+    After=network.target
+    
+    [Service]
+    User=ubuntu
+    WorkingDirectory=/home/ubuntu/App
+    ExecStart=/home/ubuntu/App/venv/bin/python app.py
+    Restart=always
+    EnvironmentFile=/home/ubuntu/App/.env
+    
+    [Install]
+    WantedBy=multi-user.target
+    ```
+    
+3. Execute the below commands to start the service
+
+    ```sh
+    sudo systemctl daemon-reexec
+    sudo systemctl daemon-reload
+    sudo systemctl enable flask-app
+    sudo systemctl start flask-app
+    ```
+
+    <img width="796" height="80" alt="image" src="https://github.com/user-attachments/assets/d7215ce4-5b15-4c39-8b4a-7f8c2f9b6ff8" />
+
+4. Verify the service
+
+    ```sh
+    sudo systemctl status flask-app
+    ```
+
+    <img width="1172" height="349" alt="image" src="https://github.com/user-attachments/assets/c70655df-7c4b-4258-a6bd-f4a352cffddb" />
+
 ---
 
 ## Phase 4: Deploying to Staging Environment
@@ -273,6 +321,51 @@ This project is executed in **4 phases**, each containing a set of clear deploym
 
 #### Steps:
 
-1. 
+1. Switch to `staging` branch and add the below script to the `flask_ci.yml` pipeline
+
+    ```sh
+    - name: Configuring ssh-agent
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+    
+    - name: Add EC2 to known hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H 3.238.90.48 >> ~/.ssh/known_hosts # Add Staging EC2 host key to known hosts
+          ssh-keyscan -H 3.235.176.224 >> ~/.ssh/known_hosts # Add Production EC2 host key to known hosts
+    
+    - name: Deploy to Staging environment
+        run: |
+          ssh ubuntu@3.238.90.48 << 'EOF'
+            cd /home/ubuntu
+            if [ ! -d "app"] then
+              git clone https://github.com/tanneerugowtham6/GitHub_Actions_CI_CD_Assignment.git
+            fi
+            cd app/GitHub_Actions_CI_CD_Assignment
+            git pull origin staging
+            pip3 install -r requirements.txt
+            sudo systemctl restart flask-app
+          EOF
+    ```
+2. Save and commit the changes to the local repository
+3. Go to GitHub Repository, click on **Settings**
+
+    <img width="878" height="151" alt="image" src="https://github.com/user-attachments/assets/0ac20de1-c391-4ed8-bfe1-00905bbde120" />
+
+4. From the left side menu expand **Secrets and variables**, select **Actions**
+
+    <img width="1363" height="821" alt="image" src="https://github.com/user-attachments/assets/e3fe5f5c-8a50-4c0b-bde2-00f2877645b5" />
+
+5. Click on New Repository Secret, add **Name** and **Secret**
+
+    <img width="1386" height="553" alt="image" src="https://github.com/user-attachments/assets/6688ce5b-f37b-41c6-b73b-76b60065cec5" />
+
+6.  Click on Add secret
+7.  s
+8.  sd
+9.  cv
+10.  sdc
+11.  as
 
 ---
