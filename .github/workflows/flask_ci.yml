@@ -51,7 +51,7 @@ jobs:
           ssh ubuntu@$STAGING << EOF
             set -e
             cd /home/ubuntu
-            if [ ! -d "app"] then
+            if [ ! -d "app"]; then
               git clone https://github.com/tanneerugowtham6/GitHub_Actions_CI_CD_Assignment.git
             fi
             cd app/GitHub_Actions_CI_CD_Assignment
