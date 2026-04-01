@@ -64,6 +64,6 @@ jobs:
             fi
             cd app
             git pull origin staging
-            pip install -r requirements.txt
+            /home/ubuntu/venv/bin/pip install -r requirements.txt
             sudo systemctl restart flask-app
           EOF
