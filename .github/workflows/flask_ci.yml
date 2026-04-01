@@ -1,9 +1,8 @@
 name: Flask CI Pipeline
-
 on:
   push:
     branches:
-      - main
+      # - main
       - staging
   pull_request:
 
