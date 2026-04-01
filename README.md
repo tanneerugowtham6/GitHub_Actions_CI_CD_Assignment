@@ -190,66 +190,6 @@ This project is executed in **4 phases**, each containing a set of clear deploym
 
 #### Steps:
 
-1. Update and upgrade the repositories
-
-    ```
-    sudo apt update
-    sudo apt upgrade -y
-    ```
-    
-2. Install python and pip
-
-    ```
-    sudo apt install python3 python3-pip -y
-    ```
-
-3. Install Git
-
-    ```
-    sudo apt install git -y
-    ```
-    
-4. Verify Installation
-
-    ```
-    python3 --version
-    pip3 --version
-    ```
-    
-5. Install Python Virtual Environment
-
-    ```
-    python3 -m venv venv
-    souce venv/bin/activate
-    ```
-
-6. Install Application dependencies (flask and gunicorn)
-
-    ```
-    pip install flask gunicorn
-    ```
-    
-7. Run the application
-
-    ```
-    gunicorn -w 4 app:app -b 0.0.0.0:5000
-    ```
-    
-8. Make sure the below folder structure in the EC2 instance, if `app` folder is missing, create it
-
-    ```
-    /home/ubuntu/app
-    ```
-    
-9. vsd
-10. v
-
----
-
-## Phase 4: Deploying to Staging Environment
-
-### Task-1: Server Preparation
-
 1. Go to the Staging EC2 Instance and copy the Public IPv4 or Public DNS
 2. Launch the Terminal (macOS), Command Prompt (Windows)
 3. Navigate to the folder where your `.pem` file is downloaded and assign the executable permissions to the file
@@ -289,7 +229,7 @@ This project is executed in **4 phases**, each containing a set of clear deploym
     <img width="1546" height="397" alt="image" src="https://github.com/user-attachments/assets/5226706d-9a8d-4fa5-a4c7-acf852a87e78" />
     <img width="820" height="397" alt="image" src="https://github.com/user-attachments/assets/5549aa81-7f98-4750-8dd3-810a57145e50" />
 
-11. Verify the installations
+7. Verify the installations
 
     ```sh
     python3 --version
@@ -298,10 +238,41 @@ This project is executed in **4 phases**, each containing a set of clear deploym
 
     <img width="450" height="76" alt="image" src="https://github.com/user-attachments/assets/cb857d17-26a0-4b6f-ad1d-0687b1a207f4" />
 
-12. Go to the Jenkins EC2 Instance and copy the Public IPv4 or Public DNS
-13. Connect to the Staging EC2 Instance, Update the available packages and install Python libraries
+8. Install Python Virtual Environment
 
-    ```sh
-    sudo apt update
-    sudo apt install -y python3-venv python3-pip
     ```
+    python3 -m venv venv
+    souce venv/bin/activate
+    ```
+
+9. Install Application dependencies (flask and gunicorn)
+
+    ```
+    pip install flask gunicorn
+    ```
+    
+10. Run the application
+
+    ```
+    gunicorn -w 4 app:app -b 0.0.0.0:5000
+    ```
+    
+11. Make sure the below folder structure in the EC2 instance, if `app` folder is missing, create it
+
+    ```
+    /home/ubuntu/app
+    ```
+    
+12. Repeat the same steps for Production EC2 Instance
+
+---
+
+## Phase 4: Deploying to Staging Environment
+
+### Task-1:
+
+#### Steps:
+
+1. 
+
+---
