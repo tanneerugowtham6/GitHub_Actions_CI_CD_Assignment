@@ -10,7 +10,12 @@ on:
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
-    
+    env:
+      STAGING: ${{ secrets.STAGING_HOST }}
+      PROD: ${{ secrets.PRODUCTION_HOST }}
+      MONGO_URI: ${{ secrets.MONGO_URI }}
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+
     steps:
       - name: Code checkout
         uses: actions/checkout@v4
@@ -26,20 +31,31 @@ jobs:
           pip install -r requirements.txt
       
       - name: Run tests
-        env:
-          MONGO_URI: ${{ secrets.MONGO_URI }}
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
         run: |
           pip install pytest
           pytest
-          
+      
+      - name: Configuring ssh-agent
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+      - name: Add EC2 to known hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H $STAGING >> ~/.ssh/known_hosts
+          ssh-keyscan -H $PROD >> ~/.ssh/known_hosts
+
       - name: Deploy to Staging environment
         run: |
-          ssh ubuntu@3.238.90.48 << 'EOF'
-            cd /home/ubuntu/app
-            git clone https://github.com/tanneerugowtham6/GitHub_Actions_CI_CD_Assignment.git
-            cd GitHub_Actions_CI_CD_Assignment
-            pip install -r requirements.txt
-            pkill -f "python3 app.py" || true
-            nohup python3 app.py
+          ssh ubuntu@$STAGING << EOF
+            set -e
+            cd /home/ubuntu
+            if [ ! -d "app"] then
+              git clone https://github.com/tanneerugowtham6/GitHub_Actions_CI_CD_Assignment.git
+            fi
+            cd app/GitHub_Actions_CI_CD_Assignment
+            git pull origin staging
+            pip3 install -r requirements.txt
+            sudo systemctl restart flask-app
           EOF
