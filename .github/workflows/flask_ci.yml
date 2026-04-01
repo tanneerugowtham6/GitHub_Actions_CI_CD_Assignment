@@ -51,7 +51,10 @@ jobs:
           ssh ubuntu@$STAGING << EOF
             set -e
             cd /home/ubuntu
-            git clone https://github.com/tanneerugowtham6/GitHub_Actions_CI_CD_Assignment.git app
+            if [ ! -d "app/.git" ]; then
+              rm -rf app
+              git clone git@github.com:tanneerugowtham6/GitHub_Actions_CI_CD_Assignment.git app
+            fi
             cd app
             # git pull origin staging
             git fetch origin
