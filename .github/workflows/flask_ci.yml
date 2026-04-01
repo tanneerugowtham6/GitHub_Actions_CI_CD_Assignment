@@ -1,4 +1,5 @@
 name: Flask CI Pipeline
+
 on:
   push:
     branches:
