@@ -62,7 +62,7 @@ jobs:
                 git clone https://github.com/tanneerugowtham6/GitHub_Actions_CI_CD_Assignment.git app
               fi
             fi
-            cd app
+            # cd app
             git pull origin staging
             /home/ubuntu/venv/bin/pip install -r requirements.txt
             sudo systemctl restart flask-app
