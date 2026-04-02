@@ -56,7 +56,8 @@ jobs:
             if [ -d "app/.git" ]; then
               echo "App directory exists. Pulling latest changes..."
               cd app
-              git pull origin main
+              git fetch origin
+              git reset --hard origin/main
             fi
             else
               echo "App directory does not exist. Cloning repository..."
