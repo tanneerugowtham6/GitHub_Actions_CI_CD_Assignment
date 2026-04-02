@@ -339,17 +339,19 @@ This project is executed in **4 phases**, each containing a set of clear deploym
         run: |
           ssh ubuntu@$STAGING << EOF
             set -e
+            cd /home/ubuntu
+            if [ -d "app/.git" ]; then
+              echo "App directory exists. Pulling latest changes..."
+              cd app
+              git fetch origin
+              git reset --hard origin/main
+            else
+              echo "App directory does not exist. Cloning repository..."
+              git clone git@github.com:tanneerugowtham6/GitHub_Actions_CI_CD_Assignment.git app
+              cd app
+            fi
             echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
             echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
-            cd /home/ubuntu
-            if [ ! -d "app/.git" ]; then
-              rm -rf app
-              git clone git@github.com:tanneerugowtham6/GitHub_Actions_CI_CD_Assignment.git app
-            fi
-            cd app
-            # git pull origin staging
-            git fetch origin
-            git reset --hard origin/staging
             /home/ubuntu/venv/bin/pip install -r requirements.txt
             sudo systemctl restart flask-app
           EOF
@@ -387,4 +389,10 @@ This project is executed in **4 phases**, each containing a set of clear deploym
     <img width="1623" height="381" alt="image" src="https://github.com/user-attachments/assets/f8771c90-749a-4415-98cf-2bb5088fffc3" />
 
 ---
+
+## Phase 5: Deploying to Production Environment
+
+### Task-1: Configure the pipeline script
+
+#### Steps:
 
