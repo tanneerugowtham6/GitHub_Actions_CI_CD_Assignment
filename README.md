@@ -34,7 +34,7 @@ This project is executed in **5 phases**, each containing a set of clear deploym
 ## Environment
 
 ### Cloud Platform
-- **Provider:** AWS EC2
+- **Provider:** AWS
 
 ### Operating System
 - **OS:** Ubuntu 20.04 LTS
@@ -49,8 +49,8 @@ This project is executed in **5 phases**, each containing a set of clear deploym
 
 ## Technology Stack
 - Python
-- Jenkins
 - Git
+- GitHub Actions
 
 ---
 
