@@ -268,15 +268,14 @@ This project is executed in **4 phases**, each containing a set of clear deploym
 
     ```sh
     [Unit]
-    Description=Python Web App
+    Description=Flask App
     After=network.target
     
     [Service]
     User=ubuntu
-    WorkingDirectory=/home/ubuntu/App
-    ExecStart=/home/ubuntu/App/venv/bin/python app.py
+    WorkingDirectory=/home/ubuntu/app
+    ExecStart=/home/ubuntu/venv/bin/python /home/ubuntu/app/app.py
     Restart=always
-    EnvironmentFile=/home/ubuntu/App/.env
     
     [Install]
     WantedBy=multi-user.target
@@ -301,6 +300,8 @@ This project is executed in **4 phases**, each containing a set of clear deploym
 
     <img width="1172" height="349" alt="image" src="https://github.com/user-attachments/assets/c70655df-7c4b-4258-a6bd-f4a352cffddb" />
 
+5. Repeat the same steps for Production EC2 Instance
+
 ---
 
 ## Phase 4: Deploying to Staging Environment
@@ -309,41 +310,57 @@ This project is executed in **4 phases**, each containing a set of clear deploym
 
 #### Steps:
 
-1. Switch to `staging` branch and add the below script to the `flask_ci.yml` pipeline
+1. Switch to `main` branch and add the below script for `staging-deployment` job to the `flask_ci.yml` pipeline
 
     ```sh
-    - name: Configuring ssh-agent
-        uses: webfactory/ssh-agent@v0.8.0
-        with:
-          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
-
-    - name: Add EC2 to known hosts
-        run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan -H $STAGING >> ~/.ssh/known_hosts
-          ssh-keyscan -H $PROD >> ~/.ssh/known_hosts
-
-    - name: Deploy to Staging environment
-        run: |
-          ssh ubuntu@$STAGING << EOF
-            set -e
-            cd /home/ubuntu
-            if [ -d "app/.git" ]; then
-              echo "App directory exists. Pulling latest changes..."
-              cd app
-              git fetch origin
-              git reset --hard origin/main
-            else
-              echo "App directory does not exist. Cloning repository..."
-              git clone git@github.com:tanneerugowtham6/GitHub_Actions_CI_CD_Assignment.git app
-              cd app
-            fi
-            echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
-            echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
-            /home/ubuntu/venv/bin/pip install -r requirements.txt
-            sudo systemctl restart flask-app
-          EOF
+    staging-deployment:
+      name: Deploy to Staging Environment
+      runs-on: ubuntu-latest
+      needs: build-and-test
+    
+      if: github.ref == 'refs/heads/staging'
+    
+      env:
+        STAGING: ${{ secrets.STAGING_HOST }}
+        MONGO_URI: ${{ secrets.MONGO_URI }}
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}
+    
+      steps:
+        - name: Configuring ssh-agent
+          uses: webfactory/ssh-agent@v0.8.0
+          with:
+            ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+    
+        - name: Add EC2 to known hosts
+          run: |
+            mkdir -p ~/.ssh
+            ssh-keyscan -H $STAGING >> ~/.ssh/known_hosts
+        
+        - name: Deploy to Staging environment
+          run: |
+            ssh ubuntu@$STAGING << EOF
+              set -e
+              cd /home/ubuntu
+              if [ -d "app/.git" ]; then
+                echo "App directory exists. Pulling latest changes..."
+                cd app
+                git fetch origin
+                git reset --hard origin/staging
+              else
+                echo "App directory does not exist. Cloning repository..."
+                git clone https://github.com/tanneerugowtham6/GitHub_Actions_CI_CD_Assignment.git app
+                cd app
+              fi
+              echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
+              echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+              /home/ubuntu/venv/bin/pip install -r requirements.txt
+              sudo systemctl restart flask-app
+            EOF
     ```
+
+> [!NOTE]
+> Refer to the `.github/workflows/flask_ci.yml` file in this repository for complete yml file
+
 2. Save and commit the changes to the local repository
 
 ### Task-2: Configure the Secrets in GitHub
@@ -358,21 +375,30 @@ This project is executed in **4 phases**, each containing a set of clear deploym
 
     <img width="1363" height="821" alt="image" src="https://github.com/user-attachments/assets/e3fe5f5c-8a50-4c0b-bde2-00f2877645b5" />
 
-3. Click on New Repository Secret, add **Name** and **Secret**
+3. Click on New Repository Secret, add **Name** and **Secret** [Secrets required for this job **STAGING_HOST, MONGO_URI, SECRET_KEY**]
 
     <img width="1386" height="553" alt="image" src="https://github.com/user-attachments/assets/6688ce5b-f37b-41c6-b73b-76b60065cec5" />
 
 4.  Click on Add secret
+5.  Repeat the above steps to add more secrets
+
+> [!NOTE]
+> If any of the secret already added to GitHub, do not duplicate or recreate it.
 
 ### Task-3: Apply changes and Verify
 
 #### Steps:
 
-5.  Push the changes saved in local to GitHub, which triggers the Pipeline
+1.  Push the changes saved in local to GitHub, which triggers the Pipeline
 
     <img width="864" height="215" alt="image" src="https://github.com/user-attachments/assets/5a346d2d-7a99-4636-a705-0f117b2c4aa3" />
     <img width="1710" height="808" alt="image" src="https://github.com/user-attachments/assets/f2e1b81a-8c03-4d4c-8de5-256ce0c7e25e" />
-6. Verify if the application has been launched successfully by visiting `http://<public-ip-of-staging-server>:5000`
+    
+2. Verify if the Production Deployment has triggered
+
+    <img width="1709" height="623" alt="image" src="https://github.com/user-attachments/assets/898e7e21-9d6c-4076-b554-0c2b5f0c803e" />
+
+3. Verify if the application has been launched successfully by visiting `http://<public-ip-of-staging-server>:5000`
 
     <img width="1623" height="381" alt="image" src="https://github.com/user-attachments/assets/f8771c90-749a-4415-98cf-2bb5088fffc3" />
 
@@ -384,3 +410,101 @@ This project is executed in **4 phases**, each containing a set of clear deploym
 
 #### Steps:
 
+1. Switch to `main` branch and add the below script for `staging-deployment` job to the `flask_ci.yml` pipeline
+
+    ```sh
+    production-deployment:
+      name: Deploy to Production Environment
+      runs-on: ubuntu-latest
+      needs: build-and-test
+    
+      if: startsWith(github.ref, 'refs/tags/v')
+    
+      env:
+        PROD: ${{ secrets.PRODUCTION_HOST }}
+        MONGO_URI: ${{ secrets.MONGO_URI }}
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}
+    
+      steps:
+        - name: Configuring ssh-agent
+          uses: webfactory/ssh-agent@v0.8.0
+          with:
+            ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+    
+        - name: Add EC2 to known hosts
+          run: |
+            mkdir -p ~/.ssh
+            ssh-keyscan -H $PROD >> ~/.ssh/known_hosts
+    
+        - name: Deploy to Production Environment
+          run: |
+            ssh ubuntu@$PROD << EOF
+              set -e
+              cd /home/ubuntu
+              if [ -d "app/.git" ]; then
+                echo "App directory exists. Pulling latest changes..."
+                cd app
+                git pull origin main
+              else
+                echo "App directory does not exist. Cloning repository..."
+                git clone https://github.com/tanneerugowtham6/GitHub_Actions_CI_CD_Assignment.git app
+                cd app
+              fi
+              echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
+              echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+              /home/ubuntu/venv/bin/pip install -r requirements.txt
+              sudo systemctl restart flask-app
+            EOF
+    ```
+
+
+> [!NOTE]
+> Refer to the `.github/workflows/flask_ci.yml` file in this repository for complete yml file
+
+2. Save and commit the changes to the local repository
+
+### Task-2: Configure the Secrets in GitHub
+
+#### Steps:
+
+1. Go to GitHub Repository, click on **Settings**
+
+    <img width="878" height="151" alt="image" src="https://github.com/user-attachments/assets/0ac20de1-c391-4ed8-bfe1-00905bbde120" />
+
+2. From the left side menu expand **Secrets and variables**, select **Actions**
+
+    <img width="1363" height="821" alt="image" src="https://github.com/user-attachments/assets/e3fe5f5c-8a50-4c0b-bde2-00f2877645b5" />
+
+3. Click on New Repository Secret, add **Name** and **Secret** [Secrets required for this job **PRODUCTION_HOST, MONGO_URI, SECRET_KEY**]
+
+    <img width="1386" height="553" alt="image" src="https://github.com/user-attachments/assets/6688ce5b-f37b-41c6-b73b-76b60065cec5" />
+
+4.  Click on Add secret
+5.  Repeat the above steps to add more secrets
+
+> [!NOTE]
+> If any of the secret already added to GitHub, do not duplicate or recreate it.
+
+### Task-3: Apply changes and Verify
+
+#### Steps:
+
+1. Push the changes saved in local to GitHub, which triggers the Pipeline
+
+    <img width="864" height="215" alt="image" src="https://github.com/user-attachments/assets/5a346d2d-7a99-4636-a705-0f117b2c4aa3" />
+    <img width="1710" height="808" alt="image" src="https://github.com/user-attachments/assets/f2e1b81a-8c03-4d4c-8de5-256ce0c7e25e" />
+    
+2. Tag the changes applied, and push to GitHub
+
+    ```
+    git checkout main
+    git tag v1.0
+    git push origin v1.0
+    ```
+3. Verify if the Production Deployment has triggered
+
+    <img width="1709" height="623" alt="image" src="https://github.com/user-attachments/assets/3c8539b0-78da-4a27-8553-1a07f3f0b588" />
+
+4. Verify if the application has been launched successfully by visiting `http://<public-ip-of-staging-server>:5000`
+
+    <img width="1623" height="381" alt="image" src="https://github.com/user-attachments/assets/f8771c90-749a-4415-98cf-2bb5088fffc3" />
