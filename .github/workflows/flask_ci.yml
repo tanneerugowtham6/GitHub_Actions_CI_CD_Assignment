@@ -5,6 +5,8 @@ on:
     branches:
       # - main
       - staging
+    tags:
+      - 'v*'
   pull_request:
 
 jobs:
@@ -50,17 +52,41 @@ jobs:
         run: |
           ssh ubuntu@$STAGING << EOF
             set -e
-            echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
-            echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
             cd /home/ubuntu
-            if [ ! -d "app/.git" ]; then
-              rm -rf app
+            if [ -d "app/.git" ]; then
+              echo "App directory exists. Pulling latest changes..."
+              cd app
+              git pull origin main
+            fi
+            else
+              echo "App directory does not exist. Cloning repository..."
               git clone git@github.com:tanneerugowtham6/GitHub_Actions_CI_CD_Assignment.git app
             fi
             cd app
-            # git pull origin staging
-            git fetch origin
-            git reset --hard origin/staging
+            echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
+            echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
             /home/ubuntu/venv/bin/pip install -r requirements.txt
             sudo systemctl restart flask-app
           EOF
+      
+      # - name: Deploy to Production Environment
+      #   if: startsWith(github.ref, 'refs/tags/v')
+      #   run: |
+      #     ssh ubuntu@PROD << EOF
+      #       set -e
+      #       cd /home/ubuntu
+      #       if [ -d "app/.git" ]; then
+      #         echo "App directory exists. Pulling latest changes..."
+      #         cd app
+      #         git pull origin main
+      #       fi
+      #       else
+      #         echo "App directory does not exist. Cloning repository..."
+      #         git clone git@github.com:tanneerugowtham6/GitHub_Actions_CI_CD_Assignment.git app
+      #       fi
+      #       cd app
+      #       echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
+      #       echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+      #       /home/ubuntu/venv/bin/pip install -r requirements.txt
+      #       sudo systemctl restart flask-app
+      #     EOF
