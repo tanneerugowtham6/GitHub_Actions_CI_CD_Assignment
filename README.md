@@ -245,26 +245,14 @@ This project is executed in **4 phases**, each containing a set of clear deploym
     python3 -m venv venv
     source venv/bin/activate
     ```
-
-**9. Install Application dependencies (flask and gunicorn)
-
-    ```
-    pip install flask gunicorn
-    ```
     
-10. Run the application
-
-    ```
-    gunicorn -w 4 app:app -b 0.0.0.0:5000
-    ```**
-    
-11. Make sure the below folder structure in the EC2 instance, if `app` folder is missing, create it
+9. Make sure the below folder structure in the EC2 instance, if `app` folder is missing, create it
 
     ```
     /home/ubuntu/app
     ```
     
-12. Repeat the same steps for Production EC2 Instance
+10. Repeat the same steps for Production EC2 Instance
 
 ### Task-3: Create systemd Service
 
