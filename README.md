@@ -60,7 +60,7 @@ This project is executed in **5 phases**, each containing a set of clear deploym
     ```
     
 3. Add the Flask application code to the folder
-4. Add and commit the code to remote repository
+4. Add and commit the code to the remote repository
 
     ```
     git add .
@@ -107,7 +107,7 @@ This project is executed in **5 phases**, each containing a set of clear deploym
 
     <img width="1710" height="490" alt="image" src="https://github.com/user-attachments/assets/ad5b9571-5194-4139-9760-163ed7293d55" />
 
-3. Wokflow should be triggered
+3. Workflow should be triggered
 4. Go to GitHub Repository, click on **Settings**
 
     <img width="878" height="151" alt="image" src="https://github.com/user-attachments/assets/0ac20de1-c391-4ed8-bfe1-00905bbde120" />
@@ -120,17 +120,17 @@ This project is executed in **5 phases**, each containing a set of clear deploym
 
     <img width="1386" height="553" alt="image" src="https://github.com/user-attachments/assets/6688ce5b-f37b-41c6-b73b-76b60065cec5" />
 
-7.  Click on Add secret
-8.  Repeat the same to add another secrets
+7. Click on Add secret
+8. Repeat the same to add another secrets
 
 > [!NOTE]
-> This workflow requires to secret vairables, MONGO_URI, SECRET_KEY to be passed for the application.
+> This workflow requires two secret variables, MONGO_URI, SECRET_KEY to be passed for the application.
 
-9.  Commit the any pending chnages to the repository, which triggers the workflow
+9. Commit any pending changes to the repository, which triggers the workflow
 
     <img width="1658" height="337" alt="image" src="https://github.com/user-attachments/assets/8fc7f982-b1b8-4fd9-9642-2fcfa47b70e0" />
 
-10. Once the pipeline runs successfully and all teh conflicts were resolved, merge the changes to `main` branch
+10. Once the pipeline runs successfully and all the conflicts were resolved, merge the changes to `main` branch
 
     ```
     git checkout main
@@ -140,9 +140,6 @@ This project is executed in **5 phases**, each containing a set of clear deploym
 
     <img width="662" height="117" alt="image" src="https://github.com/user-attachments/assets/685c568b-bd97-403a-b976-604df5974372" />
     <img width="662" height="159" alt="image" src="https://github.com/user-attachments/assets/7af08731-0565-4839-8d69-07aed8c95d35" />
-    
-11. zxz
-12. xc
 
 ---
 
@@ -152,7 +149,7 @@ This project is executed in **5 phases**, each containing a set of clear deploym
 
 #### Steps:
 
-1. Login to your AWS Account and search for EC2 service
+1. Log in to your AWS Account and search for EC2 service
 
     <img width="949" height="187" alt="image" src="https://github.com/user-attachments/assets/c899ca60-e19f-4ba9-9e5c-30015013e660" />
 
@@ -160,7 +157,7 @@ This project is executed in **5 phases**, each containing a set of clear deploym
 
     <img width="297" height="138" alt="image" src="https://github.com/user-attachments/assets/bdcf3af9-b39b-49dc-9535-0809f7018e24" />
 
-3. Enter the name of the instance, select `Ubuntu Server 24.04 LTS` AMI and select the type of the instance
+3. Enter the name of the instance, select `Ubuntu Server 24.04 LTS` AMI and select the instance type
 
     <img width="881" height="581" alt="image" src="https://github.com/user-attachments/assets/fd775572-1e93-496f-8507-ba911dafd5c2" />
 
@@ -184,7 +181,7 @@ This project is executed in **5 phases**, each containing a set of clear deploym
 
     <img width="622" height="182" alt="image" src="https://github.com/user-attachments/assets/e40b6b0b-554c-4d5d-ba0f-196cf4d032c5" />
 
-9. Repeat the same process to create an EC2 instance for Staging Environment
+9. Repeat the same process to create an EC2 instance for the staging environment
 
 ### Task-2: Prepare the environment
 
@@ -220,7 +217,7 @@ This project is executed in **5 phases**, each containing a set of clear deploym
     <img width="1312" height="313" alt="image" src="https://github.com/user-attachments/assets/a47e70ea-b596-4464-8527-c78a7b7440e1" />
     <img width="817" height="365" alt="image" src="https://github.com/user-attachments/assets/002d9cac-1a41-46a9-92e5-510453322056" />
 
-6. Install required tools or software, like Python, which is required for our Flask application
+6. Install required tools such as Python, which is required for our Flask application
 
     ```sh
     sudo apt install python3 python3-pip -y
@@ -264,7 +261,7 @@ This project is executed in **5 phases**, each containing a set of clear deploym
     sudo nano /etc/systemd/system/flask-app.service
     ```
     
-2. Paste the below configuration to the service file
+2. Paste the following configuration to the service file
 
     ```sh
     [Unit]
@@ -359,11 +356,11 @@ This project is executed in **5 phases**, each containing a set of clear deploym
     ```
 
 > [!NOTE]
-> Refer to the `.github/workflows/flask_ci.yml` file in this repository for complete yml file
+> Refer to the `.github/workflows/flask_ci.yml` file for the complete workflow configuration in this repository
 
 2. Save and commit the changes to the local repository
 
-### Task-2: Configure the Secrets in GitHub
+### Task-2: Configure GitHub Secrets
 
 #### Steps:
 
@@ -394,7 +391,7 @@ This project is executed in **5 phases**, each containing a set of clear deploym
     <img width="864" height="215" alt="image" src="https://github.com/user-attachments/assets/5a346d2d-7a99-4636-a705-0f117b2c4aa3" />
     <img width="1710" height="808" alt="image" src="https://github.com/user-attachments/assets/f2e1b81a-8c03-4d4c-8de5-256ce0c7e25e" />
     
-2. Verify if the Production Deployment has triggered
+2. Verify if the Staging Deployment has been triggered
 
     <img width="1709" height="623" alt="image" src="https://github.com/user-attachments/assets/898e7e21-9d6c-4076-b554-0c2b5f0c803e" />
 
@@ -410,7 +407,7 @@ This project is executed in **5 phases**, each containing a set of clear deploym
 
 #### Steps:
 
-1. Switch to `main` branch and add the below script for `staging-deployment` job to the `flask_ci.yml` pipeline
+1. Switch to `main` branch and add the below script for `production-deployment` job to the `flask_ci.yml` pipeline
 
     ```sh
     production-deployment:
@@ -444,7 +441,8 @@ This project is executed in **5 phases**, each containing a set of clear deploym
               if [ -d "app/.git" ]; then
                 echo "App directory exists. Pulling latest changes..."
                 cd app
-                git pull origin main
+                git fetch origin
+                git reset --hard origin/main
               else
                 echo "App directory does not exist. Cloning repository..."
                 git clone https://github.com/tanneerugowtham6/GitHub_Actions_CI_CD_Assignment.git app
@@ -505,6 +503,6 @@ This project is executed in **5 phases**, each containing a set of clear deploym
 
     <img width="1709" height="623" alt="image" src="https://github.com/user-attachments/assets/3c8539b0-78da-4a27-8553-1a07f3f0b588" />
 
-4. Verify if the application has been launched successfully by visiting `http://<public-ip-of-staging-server>:5000`
+4. Verify if the application has been launched successfully by visiting `http://<public-ip-of-production-server>:5000`
 
     <img width="1623" height="381" alt="image" src="https://github.com/user-attachments/assets/f8771c90-749a-4415-98cf-2bb5088fffc3" />
