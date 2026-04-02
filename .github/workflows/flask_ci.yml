@@ -70,7 +70,7 @@ jobs:
               git reset --hard origin/staging
             else
               echo "App directory does not exist. Cloning repository..."
-              git clone git@github.com:tanneerugowtham6/GitHub_Actions_CI_CD_Assignment.git app
+              git clone https://github.com/tanneerugowtham6/GitHub_Actions_CI_CD_Assignment.git app
               cd app
             fi
             echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
@@ -113,7 +113,7 @@ jobs:
               git pull origin main
             else
               echo "App directory does not exist. Cloning repository..."
-              git clone git@github.com:tanneerugowtham6/GitHub_Actions_CI_CD_Assignment.git app
+              git clone https://github.com/tanneerugowtham6/GitHub_Actions_CI_CD_Assignment.git app
               cd app
             fi
             echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
