@@ -58,7 +58,6 @@ jobs:
               cd app
               git fetch origin
               git reset --hard origin/main
-            fi
             else
               echo "App directory does not exist. Cloning repository..."
               git clone git@github.com:tanneerugowtham6/GitHub_Actions_CI_CD_Assignment.git app
