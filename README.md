@@ -25,6 +25,12 @@ This project is executed in **5 phases**, each containing a set of clear deploym
 
 ---
 
+## Architecture
+
+<img width="1536" height="1024" alt="Architecture" src="https://github.com/user-attachments/assets/57e8c397-12a1-4449-a32a-0537ae6da94b" />
+
+---
+
 ## Environment
 
 ### Cloud Platform
