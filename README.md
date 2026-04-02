@@ -317,7 +317,7 @@ This project is executed in **4 phases**, each containing a set of clear deploym
 
 ## Phase 4: Deploying to Staging Environment
 
-### Task-1:
+### Task-1: Configure the pipeline script
 
 #### Steps:
 
@@ -328,44 +328,63 @@ This project is executed in **4 phases**, each containing a set of clear deploym
         uses: webfactory/ssh-agent@v0.8.0
         with:
           ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
-    
+
     - name: Add EC2 to known hosts
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H 3.238.90.48 >> ~/.ssh/known_hosts # Add Staging EC2 host key to known hosts
-          ssh-keyscan -H 3.235.176.224 >> ~/.ssh/known_hosts # Add Production EC2 host key to known hosts
-    
+          ssh-keyscan -H $STAGING >> ~/.ssh/known_hosts
+          ssh-keyscan -H $PROD >> ~/.ssh/known_hosts
+
     - name: Deploy to Staging environment
         run: |
-          ssh ubuntu@3.238.90.48 << 'EOF'
+          ssh ubuntu@$STAGING << EOF
+            set -e
+            echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
+            echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
             cd /home/ubuntu
-            if [ ! -d "app"] then
-              git clone https://github.com/tanneerugowtham6/GitHub_Actions_CI_CD_Assignment.git
+            if [ ! -d "app/.git" ]; then
+              rm -rf app
+              git clone git@github.com:tanneerugowtham6/GitHub_Actions_CI_CD_Assignment.git app
             fi
-            cd app/GitHub_Actions_CI_CD_Assignment
-            git pull origin staging
-            pip3 install -r requirements.txt
+            cd app
+            # git pull origin staging
+            git fetch origin
+            git reset --hard origin/staging
+            /home/ubuntu/venv/bin/pip install -r requirements.txt
             sudo systemctl restart flask-app
           EOF
     ```
 2. Save and commit the changes to the local repository
-3. Go to GitHub Repository, click on **Settings**
+
+### Task-2: Configure the Secrets in GitHub
+
+#### Steps:
+
+1. Go to GitHub Repository, click on **Settings**
 
     <img width="878" height="151" alt="image" src="https://github.com/user-attachments/assets/0ac20de1-c391-4ed8-bfe1-00905bbde120" />
 
-4. From the left side menu expand **Secrets and variables**, select **Actions**
+2. From the left side menu expand **Secrets and variables**, select **Actions**
 
     <img width="1363" height="821" alt="image" src="https://github.com/user-attachments/assets/e3fe5f5c-8a50-4c0b-bde2-00f2877645b5" />
 
-5. Click on New Repository Secret, add **Name** and **Secret**
+3. Click on New Repository Secret, add **Name** and **Secret**
 
     <img width="1386" height="553" alt="image" src="https://github.com/user-attachments/assets/6688ce5b-f37b-41c6-b73b-76b60065cec5" />
 
-6.  Click on Add secret
-7.  s
-8.  sd
-9.  cv
-10.  sdc
-11.  as
+4.  Click on Add secret
+
+### Task-3: Apply changes and Verify
+
+#### Steps:
+
+5.  Push the changes saved in local to GitHub, which triggers the Pipeline
+
+    <img width="864" height="215" alt="image" src="https://github.com/user-attachments/assets/5a346d2d-7a99-4636-a705-0f117b2c4aa3" />
+    <img width="1710" height="808" alt="image" src="https://github.com/user-attachments/assets/f2e1b81a-8c03-4d4c-8de5-256ce0c7e25e" />
+6. Verify if the application has been launched successfully by visiting `http://<public-ip-of-staging-server>:5000`
+
+    <img width="1623" height="381" alt="image" src="https://github.com/user-attachments/assets/f8771c90-749a-4415-98cf-2bb5088fffc3" />
 
 ---
+
