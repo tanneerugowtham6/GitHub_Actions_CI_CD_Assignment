@@ -104,7 +104,7 @@ jobs:
 
       - name: Deploy to Production Environment
         run: |
-          ssh ubuntu@PROD << EOF
+          ssh ubuntu@$PROD << EOF
             set -e
             cd /home/ubuntu
             if [ -d "app/.git" ]; then
