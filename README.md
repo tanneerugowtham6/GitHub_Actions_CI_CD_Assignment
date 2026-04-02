@@ -4,9 +4,9 @@
 
 ## Project Overview
 
-This repository demonstrates the implementation of a complete Continuous Integration and Continuous Deployment (CI/CD) pipeline using Jenkins for a Python Flask-based Student Registration System application.
+This repository demonstrates the implementation of a complete Continuous Integration and Continuous Deployment (CI/CD) pipeline using GitHub Actions for a Python Flask-based Student Registration System application.
 
-The pipeline automates the entire software delivery lifecycle, including environment setup, dependency installation, application testing, and deployment to a staging server hosted on AWS EC2. The deployed application is managed as a background service using systemd, ensuring high availability, automatic restarts, and reliability.
+The pipeline automates the end-to-end software delivery lifecycle, including environment setup, dependency installation, application testing, and deployment to a staging server hosted on AWS EC2. The deployed application is managed as a background service using systemd, ensuring high availability, automatic restarts, and reliability.
 
 Additionally, the pipeline is integrated with GitHub webhooks to enable automatic build triggers on code changes pushed to the main branch, enabling a fully automated and efficient deployment workflow.
 
@@ -14,7 +14,7 @@ Additionally, the pipeline is integrated with GitHub webhooks to enable automati
 
 ## Project Execution
 
-This project is executed in **4 phases**, each containing a set of clear deployment tasks required to fully host the Python Flask-based Student Registration System application on AWS.
+This project is executed in **5 phases**, each containing a set of clear deployment tasks required to fully host the Python Flask-based Student Registration System application on AWS.
 
 ### Phases of Deployment
 
@@ -33,13 +33,13 @@ This project is executed in **4 phases**, each containing a set of clear deploym
 ### Operating System
 - **OS:** Ubuntu 20.04 LTS
 
-### AWS Services Used
+### AWS Services
 - EC2
 - Security Groups
 - VPC
 
 ### Database
-- MongoDB Atlas
+- MongoDB Atlas (Cloud Database)
 
 ## Technology Stack
 - Python
@@ -53,7 +53,7 @@ This project is executed in **4 phases**, each containing a set of clear deploym
 ### Task-1: Create a Git Repository for Flask Application
 
 1. Create a Repository in GitHub
-2. Clone it to the local using the below command
+2. Clone it to your local machine using the below command
 
     ```
     git clone <repo-url>
